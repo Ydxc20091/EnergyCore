@@ -22,14 +22,21 @@ public final class DiagnosticsUi implements Listener,AutoCloseable {
     private volatile boolean closed;
     private final ConcurrentHashMap<UUID,TrackedWindow> windows=new ConcurrentHashMap<>();
     public DiagnosticsUi(EnergyCorePlugin plugin) { this.plugin=plugin; }
-    public void open(Player player) {
-        if(closed||!plugin.isEnabled()||!Bukkit.isOwnedByCurrentRegion(player)) return;
-        long generation=plugin.bridge().generation();
+    public synchronized void initialize() {
+        if(initialized||closed) return;
         String version=Bukkit.getMinecraftVersion();
         String[] parts=version.split("\\.");
         boolean supported=!version.startsWith("1.21")||(parts.length>2&&Integer.parseInt(parts[2])>=4);
-        if(!plugin.settings().diagnosticUi()||!supported) { player.sendMessage("Use /energycore inspect on this configuration."); return; }
-        if(!initialized) synchronized(this) { if(!initialized) { SparrowUI.getInstance().setUp(plugin); initialized=true; } }
+        if(!supported) return;
+        try { SparrowUI.getInstance().setUp(plugin); initialized=true; }
+        catch(RuntimeException|LinkageError failure) {
+            plugin.getLogger().warning("Sparrow UI diagnostics are unavailable on "+version+"; use /energycore inspect: "+failure);
+        }
+    }
+    public void open(Player player) {
+        if(closed||!plugin.isEnabled()||!Bukkit.isOwnedByCurrentRegion(player)) return;
+        long generation=plugin.bridge().generation();
+        if(!plugin.settings().diagnosticUi()||!initialized) { player.sendMessage("Use /energycore inspect on this configuration."); return; }
         var pane=NormalPane.empty(PaneSize.of(9,3));
         pane.setItem(10,display(Material.REDSTONE,"EnergyCore",List.of("Author: ydxc20091","Unit: "+plugin.settings().displayUnit(),"Reload generation: "+plugin.bridge().generation())));
         pane.setItem(12,display(Material.CLOCK,"Background work",List.of("Active: "+plugin.workQueue().active(),"Waiting: "+plugin.workQueue().waiting(),"Rejected: "+plugin.workQueue().rejected())));

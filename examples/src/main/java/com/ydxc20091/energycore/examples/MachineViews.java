@@ -39,14 +39,16 @@ final class MachineViews implements Listener {
 
     void open(Player player, MachineController machine) {
         if (!owns(player, machine)) return;
-        Session session = new Session(player, machine);
+        Session session = new Session(player, machine, plugin.bridge().generation());
         sessions.put(player.getUniqueId(), session);
         projections.add(session);
         render(session, snapshot(machine));
-        if (player.openInventory(session.inventory) == null) {
-            sessions.remove(player.getUniqueId(), session);
-            projections.remove(session);
+        if (sessions.get(player.getUniqueId()) != session || !owns(session)) {
+            projectionClosed(session); return;
         }
+        if (player.openInventory(session.inventory) == null) {
+            projectionClosed(session);
+        } else if (sessions.get(player.getUniqueId()) != session || !owns(session)) close(session);
     }
 
     void refresh(MachineController machine) {
@@ -100,7 +102,7 @@ final class MachineViews implements Listener {
 
     private boolean owns(Session session) {
         if (!plugin.isEnabled() || !session.player.isOnline() || !Bukkit.isOwnedByCurrentRegion(session.player)
-                || !Bukkit.isOwnedByCurrentRegion(session.location)) return false;
+                || session.generation != plugin.bridge().generation() || !Bukkit.isOwnedByCurrentRegion(session.location)) return false;
         try { session.machine.accessContext().checkAccess(); return true; }
         catch (RuntimeException rejected) { return false; }
     }
@@ -372,9 +374,11 @@ final class MachineViews implements Listener {
         final MachineController machine;
         final Location location;
         final Inventory inventory;
+        final long generation;
         long renderedRevision;
-        Session(Player player, MachineController machine) {
+        Session(Player player, MachineController machine, long generation) {
             this.player = player; this.machine = machine;
+            this.generation = generation;
             location = machine.location().clone();
             inventory = Bukkit.createInventory(this, 27, Component.text(switch (machine.kind()) {
                 case GENERATOR -> "Coal Generator"; case BANK -> "Energy Bank"; case FURNACE -> "Electric Furnace";

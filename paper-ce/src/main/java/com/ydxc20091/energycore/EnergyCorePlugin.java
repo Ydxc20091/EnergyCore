@@ -28,7 +28,7 @@ public final class EnergyCorePlugin extends JavaPlugin implements BukkitEnergySe
         getLifecycleManager().registerEventHandler(LifecycleEvents.COMMANDS,event->event.registrar().register("energycore","EnergyCore diagnostics",List.of("ec"),new AdminCommand()));
     }
     @Override public void onEnable() {
-        queue=new SnapshotWorkQueue(settings.workers(),settings.queueCapacity()); ui=new DiagnosticsUi(this); bridge.start();
+        queue=new SnapshotWorkQueue(settings.workers(),settings.queueCapacity()); ui=new DiagnosticsUi(this); ui.initialize(); bridge.start();
         getServer().getPluginManager().registerEvents(ui,this);
         getServer().getServicesManager().register(BukkitEnergyService.class,this,this,ServicePriority.Normal);
         getServer().getServicesManager().register(CraftEngineBridge.class,bridge,this,ServicePriority.Normal);
