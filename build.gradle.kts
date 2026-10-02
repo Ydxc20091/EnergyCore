@@ -8,7 +8,7 @@ plugins {
 
 allprojects {
     group = "com.ydxc20091.energycore"
-    version = "0.1.0-SNAPSHOT"
+    version = providers.gradleProperty("energycoreVersion").get()
     repositories {
         mavenCentral()
         maven("https://repo.papermc.io/repository/maven-public/")
@@ -145,6 +145,7 @@ project(":paper-ce") {
         "implementation"(project(":core"))
         "implementation"("net.momirealms:sparrow-yaml:${providers.gradleProperty("sparrowYamlVersion").get()}")
         "implementation"("net.momirealms:sparrow-ui:${providers.gradleProperty("sparrowUiVersion").get()}") { isTransitive = false }
+        "implementation"("org.bstats:bstats-bukkit:${providers.gradleProperty("bstatsVersion").get()}")
     }
     tasks.named<Jar>("jar") { archiveClassifier.set("thin") }
     tasks.named<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar>("shadowJar") {
@@ -152,6 +153,7 @@ project(":paper-ce") {
         archiveClassifier.set("")
         relocate("net.momirealms.sparrow.yaml", "com.ydxc20091.energycore.libs.yaml")
         relocate("net.momirealms.sparrow.ui", "com.ydxc20091.energycore.libs.ui")
+        relocate("org.bstats", "com.ydxc20091.energycore.libs.bstats")
         exclude("META-INF/*.SF", "META-INF/*.RSA", "META-INF/*.DSA")
         mergeServiceFiles()
         from(rootProject.file("THIRD-PARTY-NOTICES.md")) { into("META-INF") }

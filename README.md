@@ -13,14 +13,16 @@ A CraftEngine energy API for Paper and Folia, maintained by **ydxc20091**.
 
 ## Installation
 
-Download the [release files](https://github.com/Ydxc20091/EnergyCore/releases/tag/v0.1.0-SNAPSHOT).
+Download the [release files](https://github.com/Ydxc20091/EnergyCore/releases/tag/v0.1.1-SNAPSHOT).
 
-Install **CraftEngine 26.10-SNAPSHOT** and `EnergyCore-0.1.0-SNAPSHOT.jar`.
+Install **CraftEngine 26.10-SNAPSHOT** and `EnergyCore-0.1.1-SNAPSHOT.jar`.
 Install `EnergyCore-Examples` for the example pack, or `EnergyCore-FluidCore` alongside FluidCore for joint transactions. Restart the server after installation.
 
 The CraftEngine baseline is `26.10-20260929.192451-4`, SHA-256 `46ebe45f31f3e3f0965179a85cb1f308d8729f53281d6c64f4ef2af5c23d99f6`. API changes in other snapshots may require an update.
 
 Configure display units and background work in `plugins/EnergyCore/config.yml`. CE battery items use `energycore:battery`; blocks use `energycore:storage`. See the [example pack](examples/src/main/resources/pack/configuration/examples.yml).
+
+EnergyCore uses [bStats](https://bstats.org/plugin/bukkit/EnergyCore/34466) for anonymous usage statistics. Set `enabled: false` in `plugins/bStats/config.yml` to disable metrics.
 
 ## Development
 

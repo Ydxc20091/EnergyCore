@@ -7,6 +7,7 @@ import com.ydxc20091.energycore.async.SnapshotWorkQueue;
 import com.ydxc20091.energycore.ui.DiagnosticsUi;
 import io.papermc.paper.command.brigadier.*;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.*;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -19,6 +20,7 @@ public final class EnergyCorePlugin extends JavaPlugin implements BukkitEnergySe
     private volatile EnergyCoreSettings settings;
     private volatile SnapshotWorkQueue queue;
     private DiagnosticsUi ui;
+    private Metrics metrics;
     private final AtomicLong reloadRequest=new AtomicLong();
     public static BukkitEnergyService service() { BukkitEnergyService found=Bukkit.getServicesManager().load(BukkitEnergyService.class); if(found==null) throw new IllegalStateException("EnergyCore is unavailable"); return found; }
     @Override public void onLoad() {
@@ -32,9 +34,10 @@ public final class EnergyCorePlugin extends JavaPlugin implements BukkitEnergySe
         getServer().getPluginManager().registerEvents(ui,this);
         getServer().getServicesManager().register(BukkitEnergyService.class,this,this,ServicePriority.Normal);
         getServer().getServicesManager().register(CraftEngineBridge.class,bridge,this,ServicePriority.Normal);
+        metrics=new Metrics(this,34466);
         getLogger().info("EnergyCore "+getPluginMeta().getVersion()+" by ydxc20091 enabled.");
     }
-    @Override public void onDisable() { reloadRequest.incrementAndGet(); if(ui!=null) ui.close(); getServer().getServicesManager().unregisterAll(this); if(bridge!=null) bridge.close(); if(queue!=null) queue.close(); }
+    @Override public void onDisable() { reloadRequest.incrementAndGet(); if(metrics!=null) { metrics.shutdown(); metrics=null; } if(ui!=null) ui.close(); getServer().getServicesManager().unregisterAll(this); if(bridge!=null) bridge.close(); if(queue!=null) queue.close(); }
     @Override public CraftEngineBridge bridge() { return bridge; }
     @Override public SnapshotWorkQueue workQueue() { return queue; }
     @Override public Optional<EnergyStorage> storageAt(Location location,EnergySide side) { return bridge.resolver().resolve(location,side); }
