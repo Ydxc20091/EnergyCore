@@ -1,0 +1,17 @@
+name: EnergyCore-Examples
+version: '${version}'
+main: com.ydxc20091.energycore.examples.EnergyCoreExamplesPlugin
+api-version: '1.21'
+authors: [ydxc20091]
+description: Optional EnergyCore machines and charging examples by ydxc20091
+folia-supported: true
+dependencies:
+  server:
+    EnergyCore:
+      load: BEFORE
+      required: true
+      join-classpath: true
+    CraftEngine:
+      load: BEFORE
+      required: true
+      join-classpath: true

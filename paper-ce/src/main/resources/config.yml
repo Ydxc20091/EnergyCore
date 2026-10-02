@@ -1,0 +1,7 @@
+config-version: 1
+display-unit: FE
+async:
+  workers: 2
+  queue-capacity: 1024
+diagnostics:
+  ui: true

@@ -1,0 +1,105 @@
+items:
+  energycoreexample:battery:
+    material: redstone
+    data:
+      item_name: 'EnergyCore Battery'
+      max_stack_size: 1
+    settings:
+      'energycore:battery':
+        capacity: 10000
+        input-per-tick: 128
+        output-per-tick: 128
+        initial-energy: 0
+    behavior:
+      type: energycore:battery
+
+  energycoreexample:generator:
+    material: furnace
+    data:
+      item_name: 'Coal Generator'
+      max_stack_size: 1
+    model: minecraft:block/furnace
+    behavior:
+      type: block_item
+      block:
+        behavior:
+          type: energycoreexample:generator
+          capacity: 10000
+          input-per-tick: 0
+          output-per-tick: 256
+          production-per-tick: 80
+          energy-per-fuel: 12800
+        settings:
+          hardness: 2.5
+          resistance: 6
+        loot:
+          pools:
+            - rolls: 1
+              entries:
+                - type: item
+                  item: energycoreexample:generator
+                  functions:
+                    - type: energycore:preserve_storage
+        state:
+          auto_state: solid
+          model: minecraft:block/furnace
+
+  energycoreexample:bank:
+    material: iron_block
+    data:
+      item_name: 'Energy Bank'
+      max_stack_size: 1
+    model: minecraft:block/iron_block
+    behavior:
+      type: block_item
+      block:
+        behavior:
+          type: energycoreexample:bank
+          capacity: 100000
+          input-per-tick: 256
+          output-per-tick: 256
+        settings:
+          hardness: 2.5
+          resistance: 6
+        loot:
+          pools:
+            - rolls: 1
+              entries:
+                - type: item
+                  item: energycoreexample:bank
+                  functions:
+                    - type: energycore:preserve_storage
+        state:
+          auto_state: solid
+          model: minecraft:block/iron_block
+
+  energycoreexample:furnace:
+    material: blast_furnace
+    data:
+      item_name: 'Electric Furnace'
+      max_stack_size: 1
+    model: minecraft:block/blast_furnace
+    behavior:
+      type: block_item
+      block:
+        behavior:
+          type: energycoreexample:furnace
+          capacity: 10000
+          input-per-tick: 256
+          output-per-tick: 0
+          consumption-per-tick: 20
+          recipe-ticks: 200
+        settings:
+          hardness: 2.5
+          resistance: 6
+        loot:
+          pools:
+            - rolls: 1
+              entries:
+                - type: item
+                  item: energycoreexample:furnace
+                  functions:
+                    - type: energycore:preserve_storage
+        state:
+          auto_state: solid
+          model: minecraft:block/blast_furnace

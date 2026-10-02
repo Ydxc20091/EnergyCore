@@ -1,0 +1,8 @@
+name: EnergyCore-FluidCore
+version: '${version}'
+main: com.ydxc20091.energycore.fluidcore.FluidCoreAdapterPlugin
+api-version: '1.21'
+authors: [ydxc20091]
+description: Optional shared fluid, energy and item transactions.
+depend: [CraftEngine, EnergyCore, FluidCore]
+folia-supported: true
