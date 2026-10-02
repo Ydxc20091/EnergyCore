@@ -13,6 +13,8 @@ A CraftEngine energy API for Paper and Folia, maintained by **ydxc20091**.
 
 ## Installation
 
+Download the [release files](https://github.com/Ydxc20091/EnergyCore/releases/tag/v0.1.0-SNAPSHOT).
+
 Install **CraftEngine 26.10-SNAPSHOT** and `EnergyCore-0.1.0-SNAPSHOT.jar`.
 Install `EnergyCore-Examples` for the example pack, or `EnergyCore-FluidCore` alongside FluidCore for joint transactions. Restart the server after installation.
 
